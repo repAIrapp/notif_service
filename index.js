@@ -8,20 +8,17 @@ const client = require("prom-client");
 
 app.use(express.json());
 const register = new client.Registry();
-// Crée une métrique de type Counter
+
 const notifRequestsCounter = new client.Counter({
   name: "notif_requests_total",
   help: "Nombre total de requêtes sur le service notif",
   labelNames: ["method", "route", "status"]
 });
 
-// Enregistre la métrique dans le registre
 register.registerMetric(notifRequestsCounter);
 
-// Collecte les métriques système par défaut
 client.collectDefaultMetrics({ register });
 
-// Middleware pour enregistrer chaque requête
 app.use((req, res, next) => {
   res.on("finish", () => {
     notifRequestsCounter.inc({
@@ -38,7 +35,7 @@ app.get("/metrics", async (req, res) => {
   res.send(await register.metrics());
 });
 app.listen(PORT, () => {
-  console.log(`📨 Notification service running on port ${PORT}`);
+  console.log(`Notification service running on port ${PORT}`);
 });
 const metricsApp = express();
 metricsApp.get("/metrics", async (req, res) => {
@@ -46,5 +43,5 @@ metricsApp.get("/metrics", async (req, res) => {
   res.send(await register.metrics());
 });
 metricsApp.listen(9105, () => {
-  console.log("📊 notif service metrics exposed on http://localhost:9105/metrics");
+  console.log("notif service metrics exposed on http://localhost:9105/metrics");
 });
