@@ -2,22 +2,13 @@ name: Notif Service CI
 
 on:
   push:
-    branches: [dev, main]
-    paths:
-      - 'notif_service/**'
-      - '.github/workflows/ci.yml'
+    branches: [dev, branch]
   pull_request:
-    branches: [dev, main]
-    paths:
-      - 'notif_service/**'
-      - '.github/workflows/ci.yml'
+    branches: [dev, branch]
 
 jobs:
   ci:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: notif_service
 
     steps:
       - name: Checkout
@@ -27,8 +18,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
-          cache-dependency-path: notif_service/package-lock.json
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
