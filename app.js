@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const emailRoutes = require("./src/routes/email");
 const client = require("prom-client");
+const helmet = require("helmet");
 
 const app = express();
 app.use(express.json());
@@ -17,6 +18,7 @@ const notifRequestsCounter = new client.Counter({
 register.registerMetric(notifRequestsCounter);
 client.collectDefaultMetrics({ register });
 
+app.use(helmet());
 app.use((req, res, next) => {
   res.on("finish", () => {
     notifRequestsCounter.inc({
