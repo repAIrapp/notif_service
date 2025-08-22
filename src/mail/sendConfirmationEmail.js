@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const isDev = process.env.NODE_ENV !== "production";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -6,6 +7,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: isDev ? { rejectUnauthorized: false } : undefined,
 });
 
 async function sendConfirmationEmail(toEmail, confirmationLink) {
