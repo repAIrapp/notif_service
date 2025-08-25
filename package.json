@@ -8,7 +8,8 @@
     "test:ci": "jest --ci --runInBand",
     "coverage": "jest --coverage",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "build": "echo 'Pas de build nécessaire pour ce service'"
   },
   "keywords": [],
   "author": "",

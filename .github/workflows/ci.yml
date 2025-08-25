@@ -26,5 +26,9 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+      - name: Étape de build (non requise)
+        run: echo "Aucune étape de build requise pour ce microservice"
+
+
       - name: Run tests with coverage
         run: npm test -- --ci --runInBand --coverage
