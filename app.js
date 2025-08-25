@@ -1,4 +1,3 @@
-// src/app.js
 require("dotenv").config();
 const express = require("express");
 const emailRoutes = require("./src/routes/email");
@@ -38,7 +37,6 @@ app.get("/health", (_req, res) => {
 // Routes
 app.use("/api/email", emailRoutes);
 
-// Expose aussi le registry pour /metrics si tu veux
 app.get("/metrics", async (_req, res) => {
   res.setHeader("Content-Type", register.contentType);
   res.send(await register.metrics());
