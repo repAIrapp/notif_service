@@ -30,7 +30,13 @@ router.post(
   emailLimiter,
   [
     body("email").isEmail(),
-    body("confirmationLink").isURL(),
+    // body("confirmationLink").isURL(),
+     body("confirmationLink").isURL({
+    require_protocol: true,
+    require_host: true,
+    require_tld: false,           
+    protocols: ["http", "https"],
+   }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -43,10 +49,28 @@ router.post(
     try {
       await sendConfirmationEmail(email, confirmationLink);
       res.json({ message: "Email de confirmation envoyé." });
+    // } catch (err) {
+    //   console.error("Erreur envoi email:", err);
+    //   res.status(500).json({ error: "Échec de l’envoi de l’email." });
+    // }
     } catch (err) {
-      console.error("Erreur envoi email:", err);
-      res.status(500).json({ error: "Échec de l’envoi de l’email." });
-    }
+  console.error("Erreur envoi email:", {
+    message: err?.message,
+    code: err?.code,
+    response: err?.response,
+    responseCode: err?.responseCode
+  });
+  return res.status(500).json({
+    error: "Échec de l’envoi de l’email.",
+    details: process.env.NODE_ENV !== "production" ? {
+      message: err?.message,
+      code: err?.code,
+      response: err?.response,
+      responseCode: err?.responseCode
+    } : undefined
+  });
+}
+
   }
 );
 
