@@ -30,12 +30,29 @@ router.post(
 
     const { email, confirmationLink } = req.body;
 
-    try {
-      await sendConfirmationEmail(email, confirmationLink);
-      return res.json({ message: "Email de confirmation envoyé." });
-    } catch (err) {
-      return res.status(500).json({ error: "Échec de l’envoi de l’email." });
-    }
+    // try {
+    //   await sendConfirmationEmail(email, confirmationLink);
+    //   return res.json({ message: "Email de confirmation envoyé." });
+    // } catch (err) {
+    //   return res.status(500).json({ error: "Échec de l’envoi de l’email." });
+    // }
+      try {
+    await sendConfirmationEmail(email, confirmationLink);
+    return res.json({ message: "Email de confirmation envoyé." });
+  } catch (err) {
+    console.error("[MAIL][ROUTE] send failed:", {
+      message: err?.message,
+      code: err?.code,
+      response: err?.response?.data,
+      stack: err?.stack,
+    });
+
+    return res.status(500).json({
+      error: process.env.NODE_ENV === "production"
+        ? "Échec de l’envoi de l’email."
+        : `Échec: ${err?.message || "unknown"}`,
+    });
+  }
   }
 );
 
