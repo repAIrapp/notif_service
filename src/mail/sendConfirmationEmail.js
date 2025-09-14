@@ -1,3 +1,4 @@
+
 const nodemailer = require("nodemailer");
 
 const EMAIL_USER = (process.env.EMAIL_USER || "").trim();
@@ -19,7 +20,8 @@ async function sendConfirmationEmail(toEmail, confirmationLink) {
 
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 465,
+   // port: 465,
+    port: 587,
     secure: true, // TLS
     auth: { user: EMAIL_USER, pass: GMAIL_APP_PASSWORD },
   });
